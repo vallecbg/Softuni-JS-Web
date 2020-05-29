@@ -32,7 +32,10 @@ function index(req, res, next) {
 function details(req, res, next) {
     const id = +req.params.id;
     cubeModel.getOne(id).then(cube => {
-        if (!cube || cube === []) {
+        console.log(cube);
+        
+        if (cube.length === 0) {
+            console.log("Error");
             res.redirect('/not-found');
             return;
         }
