@@ -1,36 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
+<h1>{{name}}</h1>
+<img class="cube" src="{{imageUrl}}">
+<div class="details">
+  <p><span>Description:</span>{{description}}</p>
+  <p><span>Difficulty level:</span> {{difficulty}}</p>
+  <a class="btn" href="/">Back</a>
+  <a class="btn" href="/attach/accessory/{{_id}}">Attach Accessory</a>
+</div>
 
-<head>
-  <meta charset="UTF-8">
-  <title>Cubicle</title>
-  <link href="/css/site.css" type="text/css" rel="stylesheet">
-  <link rel='shortcut icon' type='image/x-icon' href='/images/favicon.png' />
-</head>
+<h2>Accessories</h2>
+<div class="accessories">
+  {{#each accessories}}
+    <div class="accessory">
+        <img src="{{this.imageUrl}}" alt="stickerName">
+        <h3>{{this.name}}</h3>
+        <p>{{this.description}}</p>
+    </div>
 
-<body>
-  <div class="container">
-    <header>
-      <ul>
-        <li><img class="logo" src="/images/logo.png"></li>
-        <li><a href="/">Browse</a></li>
-        <li><a href="/create">Add a Cube</a></li>
-        <li><a href="/about">About</a></li>
-      </ul>
-    </header>
-    <main>
-      {{#each cube}}
-      <h1>{{this.name}}</h1>
-      <img class="cube" src="{{this.imageUrl}}">
-      <div class="details">
-        <p><span>Description:</span> {{this.description}}</p>
-        <p><span>Difficulty level:</span> {{this.difficultyLevel}}</p>
-        <a class="btn" href="/">Back</a>
-      </div>
-      {{/each}}
-    </main>
-  </div>
-  <footer>@Cubicle: Exercise for Express.js and Handlebars</footer>
-</body>
+  {{else}}
+    <h3 class="italic">This cube has no accessories yet...</h3>
+  {{/each}}
 
-</html>
+</div>

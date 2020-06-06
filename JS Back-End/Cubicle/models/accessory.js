@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const CubeSchema = new mongoose.Schema({
+const AccessorySchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -14,20 +14,14 @@ const CubeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  difficulty: {
-    type: Number,
-    required: true,
-    min: 1,
-    max: 6
-  },
-  accessories: [{
+  cubes: [{
     type: 'ObjectId',
-    ref: 'Accessory'
+    ref: 'Cube'
   }]
 })
 
-CubeSchema.path('imageUrl').validate(function(url) {
+AccessorySchema.path('imageUrl').validate(function(url) {
   return url.startsWith("http://") || url.startsWith("https://")
 }, 'Image url is not valid')
 
-module.exports = mongoose.model('Cube', CubeSchema)
+module.exports = mongoose.model('Accessory', AccessorySchema)
