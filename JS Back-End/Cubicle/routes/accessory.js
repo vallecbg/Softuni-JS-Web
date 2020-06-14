@@ -1,15 +1,17 @@
 const { attachedAccessories } = require('../controllers/accessories')
 const express = require('express');
-
+const { checkAuthentication, getUserStatus, checkAuthenticationJSON } = require("../controllers/user");
+const { updateCube } = require('../controllers/cubes');
 const router = express.Router();
 
-router.get('/create/accessory', (req, res) => {
+router.get('/create/accessory', checkAuthentication, getUserStatus, (req, res) => {
     res.render('createAccessory', {
-        title: "Create Accessory | Cube Workshop"
+        title: "Create Accessory | Cube Workshop",
+        isLoggedIn: req.isLoggedIn
     })
 })
 
-router.post('/create/accessory', async (req, res) => {
+router.post('/create/accessory', checkAuthenticationJSON, async (req, res) => {
     const {
         name,
         description,
@@ -27,7 +29,7 @@ router.post('/create/accessory', async (req, res) => {
     res.redirect('/')
 })
 
-router.get('/attach/accessory/:id', async (req, res, next) => {
+router.get('/attach/accessory/:id', checkAuthentication, getUserStatus, async (req, res, next) => {
     const {
         id: cubeId
     } = req.params
@@ -37,13 +39,14 @@ router.get('/attach/accessory/:id', async (req, res, next) => {
         res.render('attachAccessory', {
             title: 'Attach accessory',
             ...data,
+            isLoggedIn: req.isLoggedIn
         });
     } catch (err) {
         next(err)
     }
 })
 
-router.post('/attach/accessory/:id', async (req, res, next) => {
+router.post('/attach/accessory/:id', checkAuthenticationJSON, async (req, res, next) => {
     const {
         accessory: accessoryId
     } = req.body
