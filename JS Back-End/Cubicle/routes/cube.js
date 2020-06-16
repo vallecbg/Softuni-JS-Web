@@ -29,7 +29,7 @@ router.get('/create', checkAuthentication, getUserStatus, (req, res) => {
     })
 })
 
-router.post('/create', checkAuthenticationJSON, (req, res) => {
+router.post('/create', checkAuthenticationJSON, async (req, res) => {
     const {
         name,
         description,
@@ -42,21 +42,27 @@ router.post('/create', checkAuthenticationJSON, (req, res) => {
     console.log(decodedObject);
 
     const cube = new Cube({
-        name,
-        description,
+        name: name.trim(),
+        description: description.trim(),
         imageUrl,
         difficulty: difficultyLevel,
         creatorId: decodedObject.userID
     })
 
-    cube.save((err) => {
-        if (err) {
-            console.error(err)
-            res.redirect('/create')
-        } else {
-            res.redirect('/')
-        }
-    })
+    try{
+        await cube.save()
+
+        res.redirect("/")
+    }
+    catch(e){
+        return res.render("create", {
+            title: 'Create Cube | Cube Workshop',
+            isLoggedIn: req.isLoggedIn,
+            error: 'Cube details are not valid!'
+        })
+    }
+
+   
 })
 
 router.get('/details/:id', getUserStatus, async (req, res) => {
