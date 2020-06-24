@@ -67,7 +67,24 @@ module.exports = {
             const [date, time] = dateTime.split(' - ')
             const {_id} = req.user
 
+            if(startPoint.length < 4 || endPoint.length < 4){
+                return res.render('tripps/offer-tripp.hbs', {
+                    isLoggedIn: req.user !== undefined,
+                    userEmail: req.user ? req.user.email : '',
+                    message: "Start Point and End Point should be at least 4 characters long each!"
+                })
+            }
+
+            if(date.length < 6 || time.length < 6){
+                return res.render('tripps/offer-tripp.hbs', {
+                    isLoggedIn: req.user !== undefined,
+                    userEmail: req.user ? req.user.email : '',
+                    message: "Date and Time should be at least 6 characters long each!"
+                })
+            }
+
             const errors = validationResult(req)
+            console.log(errors);
 
             if(!errors.isEmpty()){
                 return res.render('tripps/offer-tripp.hbs', {
