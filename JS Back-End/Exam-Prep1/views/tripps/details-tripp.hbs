@@ -24,10 +24,11 @@
                 <img style="display: block; margin: 0 auto; max-width: 100px;"
                     src="https://i-love-png.com/images/family-svg-clipart-white-3.png" />
                 <h5 style="font-weight: bold;">SharedTripp Buddies</h5>
-                {{#each buddies}}
-                <span>{{this}}</span>
+                {{!-- TODO: do i need to show all the buddies on one line?? can I display them on multiple lines? --}}
+                {{#each tripp.buddies}}
+                    <span>{{this.email}}</span>
                 {{else}}
-                <p>. . . . .</p>
+                    <p>. . . . .</p>
                 {{/each}}
                 <p style="font-weight:bold;">{{tripp.driver.email}}</p>
             </div>
@@ -43,8 +44,20 @@
 
                 <div style="width: 50%; word-wrap: break-word; padding: 1%; ">
                     <p style="width: 100%; word-wrap: break-word;" class="lead">{{tripp.description}}</p>
-                        
-                    <a href="#" class="btn btn-danger">Close this tripp</a>
+
+                    {{#if isDriver}}
+                    <a href="/tripp/delete-tripp/{{tripp._id}}" class="btn btn-danger">Close this tripp</a>
+                    {{else}}
+                        {{#if isUserJoined}}
+                                <a href="#" class="btn btn-info">Already joined. Don't be late!</a>
+                        {{else}}
+                            {{#if areSeatsAvailable}}
+                                <a href="/tripp/join-tripp/{{tripp._id}}" class="btn btn-info">Join now, [{{tripp.seats}}] seats left</a>
+                            {{else}}
+                                <a href="#" class="btn btn-secondary">No seats available [0]</a>
+                            {{/if}}
+                        {{/if}}
+                    {{/if}}
 
                 </div>
             </div>

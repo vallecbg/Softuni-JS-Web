@@ -24,11 +24,38 @@ module.exports = {
         detailsTripp(req, res, next ) {
             const { id } = req.params;
 
-            Tripp.findById(id).lean().then((tripp) => {
+            Tripp.findById(id).populate('driver').populate('buddies').lean().then((tripp) => {
+                //console.log(tripp);
+                const isDriver = req.user._id.equals(tripp.driver._id);
+                const areSeatsAvailable = tripp.seats > 0;
+                const isUserJoined = tripp.buddies.some(x => x._id.equals(req.user._id));
                 res.render('tripps/details-tripp.hbs', {
                     isLoggedIn: req.user !== undefined,
                     userEmail: req.user ? req.user.email : '',
+                    currentUserId: req.user ? req.user._id : '',
+                    isDriver,
+                    areSeatsAvailable,
+                    isUserJoined,
                     tripp
+                })
+            })
+        },
+        deleteTripp(req, res, next) {
+            const { id } = req.params;
+
+            Tripp.findById(id).remove().then(() => {
+                res.redirect('/tripp/shared-tripps')
+            })
+        },
+        joinTripp(req, res, next) {
+            const { id } = req.params;
+
+            Tripp.findById(id).populate('buddies').lean().then((tripp) => {
+                tripp.seats--
+                tripp.buddies.push(req.user)
+                
+                Tripp.findByIdAndUpdate(id, {seats: tripp.seats, buddies: tripp.buddies}).then(() => {
+                    res.redirect(`/tripp/details-tripp/${id}`)
                 })
             })
         }

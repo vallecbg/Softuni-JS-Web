@@ -4,6 +4,9 @@
     "authors": "author",
     "version": "1.0.0",
     "main": "pathToMain",
+    "scripts": {
+        "start": "nodemon index.js"
+    },
     "dependencies": {
         "bcrypt": "^5.0.0",
         "cookie-parser": "^1.4.5",
@@ -12,6 +15,7 @@
         "express-validator": "^6.6.0",
         "jsonwebtoken": "^8.5.1",
         "mongodb": "^3.5.9",
-        "mongoose": "^5.9.20"
+        "mongoose": "^5.9.20",
+        "nodemon": "^2.0.4"
     }
 }
