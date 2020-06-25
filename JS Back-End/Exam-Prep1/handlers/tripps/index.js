@@ -79,7 +79,8 @@ module.exports = {
                 return res.render('tripps/offer-tripp.hbs', {
                     isLoggedIn: req.user !== undefined,
                     userEmail: req.user ? req.user.email : '',
-                    message: "Start Point and End Point should be at least 4 characters long each!"
+                    message: "Start Point and End Point should be at least 4 characters long each!",
+                    oldInput: {directions, dateTime, carImage, seats, description}
                 })
             }
 
@@ -87,7 +88,8 @@ module.exports = {
                 return res.render('tripps/offer-tripp.hbs', {
                     isLoggedIn: req.user !== undefined,
                     userEmail: req.user ? req.user.email : '',
-                    message: "Date and Time should be at least 6 characters long each!"
+                    message: "Date and Time should be at least 6 characters long each!",
+                    oldInput: {directions, dateTime, carImage, seats, description}
                 })
             }
 
@@ -96,7 +98,8 @@ module.exports = {
                 return res.render('tripps/offer-tripp.hbs', {
                     isLoggedIn: req.user !== undefined,
                     userEmail: req.user ? req.user.email : '',
-                    message: 'The Car Image should be actual link to image!'
+                    message: 'The Car Image should be actual link to image!',
+                    oldInput: {directions, dateTime, carImage, seats, description}
                 })
             }
 
@@ -107,7 +110,8 @@ module.exports = {
                 return res.render('tripps/offer-tripp.hbs', {
                     isLoggedIn: req.user !== undefined,
                     userEmail: req.user ? req.user.email : '',
-                    message: errors.array()[0].msg
+                    message: errors.array()[0].msg,
+                    oldInput: {directions, dateTime, carImage, seats, description}
                 })
             }
 

@@ -29,7 +29,8 @@ module.exports = {
                 return res.render('users/login.hbs', {
                     isLoggedIn: req.user !== undefined,
                     userEmail: req.user ? req.user.email : '',
-                    message: errors.array()[0].msg
+                    message: errors.array()[0].msg,
+                    oldInput: { email, password }
                 })
             }
             
@@ -38,7 +39,8 @@ module.exports = {
                     return res.render('users/login.hbs', {
                         isLoggedIn: req.user !== undefined,
                         userEmail: req.user ? req.user.email : '',
-                        message: "User with that email or password not found!"
+                        message: "User with that email or password not found!",
+                        oldInput: { email, password }
                     })
                 }
                 return Promise.all([user.passwordsMatch(password), user])
@@ -48,7 +50,8 @@ module.exports = {
                     return res.render('users/login.hbs', {
                         isLoggedIn: req.user !== undefined,
                         userEmail: req.user ? req.user.email : '',
-                        message: "User with that email or password not found!"
+                        message: "User with that email or password not found!",
+                        oldInput: { email, password }
                     })
                 }
 
@@ -68,7 +71,8 @@ module.exports = {
                 return res.render('users/register.hbs', {
                     isLoggedIn: req.user !== undefined,
                     userEmail: req.user ? req.user.email : '',
-                    message: "Passwords must match"
+                    message: "Passwords must match",
+                    oldInput: { email, password, rePassword }
                 })
             }
 
@@ -79,17 +83,37 @@ module.exports = {
                 return res.render('users/register.hbs', {
                     isLoggedIn: req.user !== undefined,
                     userEmail: req.user ? req.user.email : '',
-                    message: errors.array()[0].msg
+                    message: errors.array()[0].msg,
+                    oldInput: { email, password, rePassword }
                 })
             }
 
-            User.create({
-                email,
-                password
-            }).then((createdUser) => {
-                console.log(createdUser);
-                res.redirect('/user/login')
-            })
+            User.findOne({email})
+                .then((currentUser) => {
+                    if(currentUser) {
+                        throw new Error('The given email is already used!')
+                    }
+                    return User.create({email, password})
+                }).then((createdUser) => {
+                    return res.redirect('/user/login')
+                }).catch((err) => {
+                    res.render('users/register.hbs', {
+                        isLoggedIn: req.user !== undefined,
+                        userEmail: req.user ? req.user.email : '',
+                        message: err.message,
+                        oldInput: { email, password, rePassword }
+                    })
+                })
+
+            
+
+            // User.create({
+            //     email,
+            //     password
+            // }).then((createdUser) => {
+            //     console.log(createdUser);
+            //     res.redirect('/user/login')
+            // })
 
         }
     }
