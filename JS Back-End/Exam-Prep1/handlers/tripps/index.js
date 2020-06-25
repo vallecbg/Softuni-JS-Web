@@ -49,14 +49,22 @@ module.exports = {
         },
         joinTripp(req, res, next) {
             const { id } = req.params;
+            const { _id } = req.user;
 
             Tripp.findById(id).populate('buddies').lean().then((tripp) => {
                 tripp.seats--
                 tripp.buddies.push(req.user)
-                
-                Tripp.findByIdAndUpdate(id, {seats: tripp.seats, buddies: tripp.buddies}).then(() => {
-                    res.redirect(`/tripp/details-tripp/${id}`)
+
+                User.findById(_id).populate('trippHistory').lean().then((currUser) => {
+                    currUser.trippHistory.push(id)
+                    User.findByIdAndUpdate(_id, {trippHistory: currUser.trippHistory}).then(() => {
+                        Tripp.findByIdAndUpdate(id, {seats: tripp.seats, buddies: tripp.buddies}).then(() => {
+                            res.redirect(`/tripp/details-tripp/${id}`)
+                        })
+                    })
                 })
+                
+                
             })
         }
     },
@@ -80,6 +88,15 @@ module.exports = {
                     isLoggedIn: req.user !== undefined,
                     userEmail: req.user ? req.user.email : '',
                     message: "Date and Time should be at least 6 characters long each!"
+                })
+            }
+
+            if(!carImage.startsWith('http://') &&
+            !carImage.startsWith('https://')){
+                return res.render('tripps/offer-tripp.hbs', {
+                    isLoggedIn: req.user !== undefined,
+                    userEmail: req.user ? req.user.email : '',
+                    message: 'The Car Image should be actual link to image!'
                 })
             }
 
