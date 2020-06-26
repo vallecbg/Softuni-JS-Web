@@ -17,6 +17,29 @@ module.exports = {
         logout(req, res, next) {
             req.user = null
             res.clearCookie(cookie).redirect('/home/')
+        },
+
+        info(req, res, next) {
+            const {_id} = req.user
+            User.findById(_id).populate('expenses').lean().then((currUser) => {
+                let totalExpenses = 0;
+                let totalExpensesCount = 0;
+                for(let i = 0; i < currUser.expenses.length; i++){
+                    totalExpenses += currUser.expenses[i].total
+                    totalExpensesCount++
+                }
+                console.log(totalExpenses);
+                console.log(totalExpensesCount);
+                //console.log(expensesTotal);
+                res.render('users/info.hbs', {
+                    isLoggedIn: req.user !== undefined,
+                    nameUser: req.user ? req.user.username : '',
+                    totalExpenses,
+                    totalExpensesCount,
+                    availableAmount: currUser.amount
+                })
+            })
+            
         }
        
     },

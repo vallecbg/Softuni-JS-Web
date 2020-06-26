@@ -61,7 +61,7 @@ module.exports = {
                 User.findById(_id).populate('expenses').lean().then((currUser) => {
                     currUser.expenses.push(createdExpense._id)
                     currUser.amount -= createdExpense.total
-                    User.findByIdAndUpdate(_id, {expenses: currUser.expenses}).then(() => {
+                    User.findByIdAndUpdate(_id, {expenses: currUser.expenses, amount: currUser.amount}).then(() => {
                         res.redirect('/home/')
                     })
                 })
