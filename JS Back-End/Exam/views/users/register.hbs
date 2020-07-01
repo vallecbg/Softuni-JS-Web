@@ -1,0 +1,19 @@
+<form method="POST" action="/user/register">
+                <h2>Register</h2>
+                <div class="on-dark">
+                    <label for="username">Username:</label>
+                    <input  type="text" placeholder="Steven" name="username" value="{{oldInput.username}}">
+                </div>
+
+                <div class="on-dark">
+                    <label for="password">Password:</label>
+                    <input  type="password"  placeholder="********" name="password" value="{{oldInput.password}}">
+                </div>
+            
+                <div class="on-dark">
+                    <label for="repeatPassword">Repeat Password:</label>
+                    <input  type="password" placeholder="********" name="rePassword" value="{{oldInput.rePassword}}">
+                </div>
+            
+                <button class="btn" type="submit" >Register</button>
+</form>
