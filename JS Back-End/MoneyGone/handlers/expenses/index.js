@@ -25,6 +25,7 @@ module.exports = {
         stopTracking(req, res, next) {
             const {id} = req.params
             Expense.findById(id).remove().then(() => {
+				//TODO: DELETE USER EXPENSE
                 res.redirect('/home/')
             })
         }
